@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMSI 2 Mod – Projekt Kratochvílice</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --tram-color: #e74c3c;
+            --bus-color: #3498db;
+            --trolej-color: #2ecc71;
+            --suburban-color: #f1c40f;
+            --train-color: #9b59b6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 { margin: 0; font-size: 2.5em; }
+        header p { margin: 10px 0 0 0; opacity: 0.9; font-style: italic; }
+
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #bdc3c7;
+            padding-bottom: 8px;
+            margin-top: 30px;
+        }
+
+        .grid-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-left: 5px solid #2c3e50;
+        }
+
+        /* Styl pro linky */
+        .line-badge {
+            display: inline-block;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        .tram { background-color: var(--tram-color); }
+        .bus { background-color: var(--bus-color); }
+        .trolej { background-color: var(--trolej-color); }
+        .suburban { background-color: var(--suburban-color); color: #333; }
+        .train { background-color: var(--train-color); }
+
+        /* Mapa sítě pomocí CSS */
+        .map-container {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            position: relative;
+            min-height: 400px;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        .map-title {
+            margin-top: 0;
+            font-size: 1.2em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Grafické uzly zastávek */
+        .station {
+            position: absolute;
+            background: #fff;
+            color: #333;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 0.9em;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .station .lines {
+            margin-top: 5px;
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+            font-size: 0.75em;
+        }
+
+        /* Pozice zastávek na fiktivní mapě */
+        #kratochvilice { top: 50px; left: 40%; }
+        #janovice { top: 250px; left: 15%; }
+        #hrbacov { top: 250px; left: 65%; }
+
+        /* Propojovací čáry (fiktivní linky) */
+        .map-line {
+            position: absolute;
+            background: #fff;
+            opacity: 0.4;
+            z-index: 0;
+        }
+        .line-1 { top: 120px; left: 25%; width: 20%; height: 2px; transform: rotate(45deg); background: var(--bus-color); height: 4px; opacity: 0.8;}
+        .line-2 { top: 120px; left: 53%; width: 20%; height: 2px; transform: rotate(-45deg); background: var(--tram-color); height: 4px; opacity: 0.8;}
+        .line-3 { top: 270px; left: 33%; width: 33%; height: 4px; background: var(--train-color); opacity: 0.8;}
+
+        footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>Projekt Kratochvílice</h1>
+        <p>Podklady a koncept pro tvorbu OMSI 2 mapy</p>
+    </header>
+
+    <h2>Základní informace</h2>
+    <div class="grid-info">
+        <div class="card">
+            <h3>Oblasti mapy</h3>
+            <p>Mapa se skládá ze tří hlavních uzlů:</p>
+            <ul>
+                <li><strong>Kratochvílice</strong> (Centrum)</li>
+                <li><strong>Janovice</strong></li>
+                <li><strong>Hrbáčov</strong></li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Typy dopravy</h3>
+            <p>Projekt kombinuje městskou, příměstskou i železniční síť pro maximální rozmanitost při řízení.</p>
+        </div>
+    </div>
+
+    <h2>Přehled linek</h2>
+    <div class="card">
+        <h3><span class="line-badge tram">Tramvaje</span> Tramvajové linky</h3>
+        <p><span class="line-badge tram">1</span>, <span class="line-badge tram">2</span> – Městská páteřní doprava v rámci Kratochvílic.</p>
+
+        <h3><span class="line-badge bus">Autobusy</span> Městské autobusy</h3>
+        <p><span class="line-badge bus">10</span>, <span class="line-badge bus">11</span>, <span class="line-badge bus">12</span>, <span class="line-badge bus">13</span> – Obsluha sídlišť a okrajových částí.</p>
+
+        <h3><span class="line-badge trolej">Trolejbusy</span> Trolejbusová linka</h3>
+        <p><span class="line-badge trolej">21</span> – Speciální kopcovitá nebo ekologická trasa přes centrum.</p>
+
+        <h3><span class="line-badge suburban">Příměstské</span> Příměstské linky (Regional)</h3>
+        <p><span class="line-badge suburban">400</span>, <span class="line-badge suburban">401</span>, <span class="line-badge suburban">402</span>, <span class="line-badge suburban">403</span>, <span class="line-badge suburban">404</span>, <span class="line-badge suburban">405</span> – Spojují Kratochvílice s Janovicemi a Hrbáčovem.</p>
+
+        <h3><span class="line-badge train">Vlaky</span> Železniční síť (AI linky / Řiditelné)</h3>
+        <p><span class="line-badge train">S1</span>, <span class="line-badge train">S2</span>, <span class="line-badge train">S3</span> (Esko) a rychlík <span class="line-badge train">R55</span>.</p>
+    </div>
+
+    <h2>Přehledná mapa sítě a zastávek</h2>
+    <p>Níže je schematické znázornění, jak jsou oblasti propojené a které klíčové linky kam vedou.</p>
+
+    <div class="map-container">
+        <div class="map-title">Schéma propojení oblastí</div>
+        
+        <div class="map-line line-1"></div>
+        <div class="map-line line-2"></div>
+        <div class="map-line line-3"></div>
+
+        <div class="station" id="kratochvilice">
+            Kratochvílice (Centrum)
+            <div class="lines">
+                <span class="line-badge tram">1</span>
+                <span class="line-badge tram">2</span>
+                <span class="line-badge bus">10-13</span>
+                <span class="line-badge trolej">21</span>
+            </div>
+        </div>
+
+        <div class="station" id="janovice">
+            Janovice
+            <div class="lines">
+                <span class="line-badge suburban">400-402</span>
+                <span class="line-badge train">S1</span>
+                <span class="line-badge train">R55</span>
+            </div>
+        </div>
+
+        <div class="station" id="hrbacov">
+            Hrbáčov
+            <div class="lines">
+                <span class="line-badge suburban">403-405</span>
+                <span class="line-badge train">S2</span>
+                <span class="line-badge train">S3</span>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Interní dokumentace pro vývoj modifikace do OMSI 2. Koncept je fiktivní.</p>
+    </footer>
+
+</div>
+
+</body>
+</html>
