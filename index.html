@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OMSI 2 – Fiktivní Hanclov (Full-screen Edice)</title>
+    <title>OMSI 2 – Fiktivní Hanclov (Prémiová Full-screen Edice)</title>
     <style>
         :root {
             --bg-color: #0d1117;
@@ -22,9 +22,7 @@
             --trolej-color: #8957e5;
         }
 
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
+        *, *::before, *::after { box-sizing: border-box; }
 
         html, body {
             margin: 0;
@@ -37,7 +35,6 @@
             color: var(--text-color);
         }
 
-        /* HLAVNÍ STRUKTURA - FULLSCREEN */
         .app-container {
             display: flex;
             width: 100vw;
@@ -45,23 +42,24 @@
             position: relative;
         }
 
-        /* TLAČÍTKO PRO SKRYTÍ MENU */
+        /* SIDEBAR / MENU */
         .toggle-sidebar-btn {
             position: absolute;
-            top: 15px;
-            left: 15px;
+            top: 20px;
+            left: 20px;
             z-index: 999;
             background-color: var(--sidebar-bg);
             border: 1px solid var(--border-color);
             color: #fff;
-            padding: 10px 14px;
-            border-radius: 6px;
+            padding: 12px 18px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            gap: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
             transition: all 0.2s ease;
         }
         .toggle-sidebar-btn:hover {
@@ -69,9 +67,8 @@
             background-color: var(--card-bg);
         }
 
-        /* BOČNÍ PANEL (SIDEBAR) */
         .sidebar {
-            width: 380px;
+            width: 360px;
             height: 100%;
             background-color: var(--sidebar-bg);
             border-right: 1px solid var(--border-color);
@@ -79,50 +76,20 @@
             flex-direction: column;
             z-index: 900;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
             box-shadow: 5px 0 25px rgba(0,0,0,0.5);
         }
 
-        .sidebar.collapsed {
-            transform: translateX(-380px);
-            position: absolute;
-        }
+        .sidebar.collapsed { transform: translateX(-360px); position: absolute; }
 
         .sidebar-header {
-            padding: 60px 24px 20px 24px;
+            padding: 80px 24px 20px 24px;
             border-bottom: 1px solid var(--border-color);
-            text-align: center;
         }
+        .sidebar-header h1 { margin: 0; font-size: 1.75rem; color: #f0f6fc; }
+        .sidebar-header p { margin: 6px 0 0 0; font-size: 0.85rem; color: var(--text-muted); }
 
-        .sidebar-header h1 {
-            margin: 0;
-            font-size: 1.6rem;
-            color: #f0f6fc;
-            letter-spacing: 0.5px;
-        }
-
-        .sidebar-header p {
-            margin: 5px 0 0 0;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .sidebar-copyright {
-            font-size: 0.75rem;
-            color: var(--accent-primary);
-            margin-top: 8px;
-        }
-
-        /* NAVIGAČNÍ MENU V SIDEBARU */
-        .sidebar-menu {
-            flex: 1;
-            padding: 20px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            overflow-y: auto;
-        }
-
+        .sidebar-menu { flex: 1; padding: 24px 16px; display: flex; flex-direction: column; gap: 10px; }
+        
         .menu-btn {
             background: transparent;
             border: 1px solid transparent;
@@ -137,453 +104,225 @@
             gap: 12px;
             transition: all 0.2s ease;
         }
+        .menu-btn:hover { background-color: rgba(177, 186, 196, 0.08); color: #fff; }
+        .menu-btn.active { background-color: var(--accent-hover); color: #fff; border-color: var(--accent-primary); font-weight: 600; }
 
-        .menu-btn:hover {
-            background-color: rgba(177, 186, 196, 0.08);
-            color: #fff;
-        }
+        .sidebar-footer { padding: 20px; border-top: 1px solid var(--border-color); font-size: 0.8rem; color: var(--text-muted); text-align: center; background-color: rgba(0,0,0,0.15); }
 
-        .menu-btn.active {
-            background-color: var(--accent-hover);
-            color: #fff;
-            border-color: var(--accent-primary);
-            font-weight: 600;
-        }
+        /* CONTENT OBSAH */
+        .content-area { flex: 1; height: 100%; position: relative; background-color: #090d13; }
+        .page { width: 100%; height: 100%; display: none; position: absolute; top: 0; left: 0; }
+        .page.active { display: block; }
 
-        .sidebar-footer {
-            padding: 16px;
-            border-top: 1px solid var(--border-color);
-            font-size: 0.75rem;
-            text-align: center;
-            color: var(--text-muted);
-            background-color: rgba(0,0,0,0.2);
-        }
+        .scrollable-content { width: 100%; height: 100%; overflow-y: auto; padding: 40px; padding-top: 90px; }
 
-        /* OBSAHOVÁ ČÁST (PROSTOR PRO MAPU A TABULKY) */
-        .content-area {
-            flex: 1;
-            height: 100%;
-            position: relative;
-            background-color: #090d13;
-        }
-
-        /* STRÁNKY */
-        .page {
-            width: 100%;
-            height: 100%;
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .page.active {
-            display: block;
-        }
-
-        /* OBLAST PRO REGISTR A LINKY (Scrollovací okna vedle menu) */
-        .scrollable-content {
-            width: 100%;
-            height: 100%;
-            overflow-y: auto;
-            padding: 40px;
-            padding-top: 80px; /* Aby tlačítko nepřekáželo textu */
-        }
-
-        .panel-card {
-            background-color: var(--sidebar-bg);
+        /* LUXUSNÍ GUI KARTY A TABULKY */
+        .gui-card {
+            background: linear-gradient(145deg, #161b22, #0f1319);
             border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 30px;
-            max-width: 1000px;
-            margin: 0 auto 30px auto;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border-radius: 12px;
+            padding: 32px;
+            max-width: 1200px;
+            margin: 0 auto 40px auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
+        .gui-card h2 { margin-top: 0; color: #f0f6fc; font-size: 1.8rem; padding-bottom: 14px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
 
-        .panel-card h2 {
-            margin-top: 0;
-            color: #f0f6fc;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 12px;
-        }
+        .search-box-container { margin: 24px 0; position: relative; }
+        .gui-search-input { width: 100%; padding: 14px 20px; background-color: #0d1117; border: 1px solid var(--border-color); border-radius: 8px; color: #fff; font-size: 1rem; transition: border-color 0.2s; }
+        .gui-search-input:focus { border-color: var(--accent-primary); outline: none; box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15); }
 
-        /* UKAZATEL CELOSTRÁNKOVÉ MAPY */
-        .fullscreen-map-viewport {
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            cursor: grab;
-            position: relative;
-        }
-        .fullscreen-map-viewport:active { cursor: grabbing; }
+        .gui-table-wrapper { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); }
+        .gui-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem; background-color: #161b22; }
+        .gui-table th { background-color: rgba(110, 118, 129, 0.12); color: #f0f6fc; padding: 16px; font-weight: 600; border-bottom: 2px solid var(--border-color); }
+        .gui-table td { padding: 14px 16px; border-bottom: 1px solid var(--border-color); color: var(--text-color); }
+        .gui-table tr:last-child td { border-bottom: none; }
+        .gui-table tr:hover td { background-color: rgba(88, 166, 255, 0.04); }
 
-        /* Obrovské plátno mapy na pozadí */
-        .big-map-canvas {
-            width: 3000px;
-            height: 2000px;
-            position: relative;
-            background-image: radial-gradient(#21262d 1.5px, transparent 1.5px);
+        /* MAPA: LINKY U ZASTÁVEK & PŘIROZENÉ LINIE */
+        .map-viewport { width: 100%; height: 100%; overflow: auto; cursor: grab; position: relative; }
+        .map-viewport:active { cursor: grabbing; }
+        
+        .map-canvas { 
+            width: 3200px; 
+            height: 2400px; 
+            position: relative; 
+            background-color: #0a0d14; 
+            background-image: radial-gradient(#1f242c 1.5px, transparent 1.5px);
             background-size: 40px 40px;
-            background-color: #0b0e14;
         }
 
-        .map-svg-layer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
+        .map-svg-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
 
-        /* Klastry na mapě */
-        .node-box {
+        /* DESIGN SAMOSTATNÝCH ZASTÁVEK NA MAPĚ */
+        .stop-node {
             position: absolute;
-            background-color: rgba(22, 27, 34, 0.95);
-            border: 1px solid #444c56;
-            border-radius: 8px;
-            padding: 14px;
-            width: 340px;
-            box-shadow: 0 12px 35px rgba(0,0,0,0.7);
             z-index: 5;
-            backdrop-filter: blur(4px);
-            transition: transform 0.2s, border-color 0.2s;
-        }
-        .node-box:hover {
-            border-color: var(--accent-primary);
-            transform: translateY(-2px);
-        }
-
-        .node-box h4 {
-            margin: 0 0 8px 0;
-            color: #f0f6fc;
-            font-size: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 6px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 8px;
+            background-color: rgba(22, 27, 34, 0.85);
+            border: 1px solid #444c56;
+            padding: 4px 10px;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            backdrop-filter: blur(3px);
+            transition: all 0.2s ease;
         }
+        .stop-node:hover { border-color: var(--accent-primary); background-color: #21262d; transform: scale(1.05); z-index: 10; }
+        
+        .stop-dot { width: 10px; height: 10px; border-radius: 50%; background-color: #fff; border: 2px solid var(--accent-primary); flex-shrink: 0; }
+        .stop-node.has-train .stop-dot { border-color: var(--train-color); background-color: var(--train-color); }
+        .stop-node.has-nad .stop-dot { border-color: var(--xbus-color); background-color: var(--xbus-color); }
 
-        .node-box ul {
-            margin: 0;
-            padding-left: 18px;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            max-height: 220px;
-            overflow-y: auto;
-        }
+        .stop-title { font-size: 0.78rem; font-weight: 600; color: #e1e7ed; white-space: nowrap; }
+        .stop-lines { display: flex; gap: 2px; }
 
-        .node-box li { margin-bottom: 3px; }
-        .node-tags { margin-top: 10px; display: flex; gap: 4px; flex-wrap: wrap; }
+        /* MINI ODZNAKY DO MAPY */
+        .m-badge { padding: 1px 4px; font-size: 0.65rem; font-weight: 800; border-radius: 3px; color: #fff; }
+        .mb-tr { background-color: var(--train-color); }
+        .mb-nad { background-color: var(--xbus-color); color: #000; }
+        .mb-bus { background-color: var(--bus-color); }
+        .mb-tro { background-color: var(--trolej-color); }
 
-        /* SOUŘADNICE PRO VELKÉ PLÁTNO (3000x2000) */
-        .pos-sever      { top: 150px;  left: 1300px; }
-        .pos-vychod-nam { top: 250px;  left: 2400px; }
-        .pos-vychod-zel { top: 750px;  left: 2500px; border-left: 4px solid var(--train-color); }
-        .pos-sidliste   { top: 600px;  left: 1800px; }
-        .pos-zapad-oc   { top: 700px;  left: 150px; }
-        .pos-stred      { top: 1150px; left: 1350px; }
-        .pos-hlavni-zel { top: 1400px; left: 500px;  border-left: 4px solid var(--train-color); }
-        .pos-jih-chrlice{ top: 1600px; left: 2100px; }
-
-        /* ODZNAKY LINEK */
-        .badge {
-            display: inline-block;
-            padding: 3px 9px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            border-radius: 4px;
-            color: #fff;
-        }
+        /* VELKÉ ODZNAKY DO LINKOVÉ TABULKY */
+        .badge { display: inline-block; padding: 4px 10px; font-size: 0.85rem; font-weight: 700; border-radius: 6px; color: #fff; text-align: center; min-width: 45px; }
         .b-train { background-color: var(--train-color); }
-        .b-xbus { background-color: var(--xbus-color); color: #0d1117; }
+        .b-nad { background-color: var(--xbus-color); color: #111; }
         .b-bus { background-color: var(--bus-color); }
         .b-trolej { background-color: var(--trolej-color); }
 
-        /* VYHLEDÁVAČ A TABULKY */
-        .search-wrapper { margin-bottom: 20px; }
-        .search-input {
-            width: 100%;
-            padding: 12px 18px;
-            background-color: #0d1117;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            color: #fff;
-            font-size: 1rem;
+        .map-legend {
+            position: absolute; bottom: 25px; right: 25px;
+            background-color: rgba(22, 27, 34, 0.95); border: 1px solid var(--border-color);
+            padding: 20px; border-radius: 8px; z-index: 800; font-size: 0.85rem; pointer-events: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
-        .search-input:focus { border-color: var(--accent-primary); outline: none; }
-
-        .table-wrap { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
-        th, td { padding: 12px 14px; border-bottom: 1px solid var(--border-color); }
-        th { background-color: rgba(110, 118, 129, 0.15); color: #f0f6fc; }
-        tr:hover td { background-color: rgba(177, 186, 196, 0.03); }
-
-        /* INFORMAČNÍ LIŠTA DOLE NA MAPĚ */
-        .map-overlay-info {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background-color: rgba(22, 27, 34, 0.9);
-            border: 1px solid var(--border-color);
-            padding: 15px;
-            border-radius: 6px;
-            z-index: 800;
-            font-size: 0.85rem;
-            pointer-events: none;
-            backdrop-filter: blur(5px);
-        }
-        .map-overlay-info h5 { margin: 0 0 5px 0; color: #fff; }
-        .map-overlay-info ul { margin: 0; padding-left: 15px; color: var(--text-muted); }
+        .map-legend h5 { margin: 0 0 10px 0; color: #fff; font-size: 0.95rem; border-bottom: 1px solid var(--border-color); padding-bottom: 4px; }
+        .map-legend div { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; color: var(--text-muted); }
+        .line-indicator { width: 24px; height: 4px; border-radius: 2px; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
 
-    <!-- TLAČÍTKO PRO SKRYTÍ / ZOBRAZENÍ MENU -->
-    <button class="toggle-sidebar-btn" onclick="toggleSidebar()" title="Přepnout zobrazení bočního menu">☰ Menu</button>
+    <button class="toggle-sidebar-btn" onclick="toggleSidebar()">☰ Ovládací Panel</button>
 
-    <!-- BOČNÍ PANEL (SIDEBAR) -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h1>Fiktivní Hanclov</h1>
-            <p>Technická dokumentace sítě pro OMSI 2</p>
-            <div class="sidebar-copyright">© 2026 Všechna práva vyhrazena</div>
+            <p>Technická síťová dokumentace OMSI 2</p>
         </div>
 
         <nav class="sidebar-menu">
-            <button class="menu-btn active" onclick="changeTab('mapa-page')">🗺️ Celostránková mapa</button>
-            <button class="menu-btn" onclick="changeTab('linky-page')">🚏 Přehled linek & NAD</button>
-            <button class="menu-btn" onclick="changeTab('registr-page')">📋 Registr zastávek (1-62)</button>
+            <button class="menu-btn active" onclick="changeTab('mapa-page')">🗺️ Interaktivní Mapa sítě</button>
+            <button class="menu-btn" onclick="changeTab('linky-page')">🚏 Přehled Linek & Jízdní řády</button>
+            <button class="menu-btn" onclick="changeTab('registr-page')">📋 Luxusní Registr zastávek (1-62)</button>
         </nav>
 
         <div class="sidebar-footer">
-            Vývojáři projektu:<br>
-            <strong>AutobusakSADzvolen</strong><br>
-            <strong>Smatlina (Petr’s plays cz)</strong>
+            Spravují autoři a majitelé projektu:<br>
+            <strong>AutobusakSADzvolen & Smatlina</strong><br>
+            <span style="color: var(--accent-primary); opacity: 0.8;">© 2026 Všechna práva vyhrazena</span>
         </div>
     </aside>
 
-    <!-- OBSAHOVÝ PROSTOR SOUBORŮ -->
     <main class="content-area">
 
-        <!-- STRÁNKA 1: MAXIMÁLNÍ FULLSCREEN MAPA -->
         <div id="mapa-page" class="page active">
-            <div class="fullscreen-map-viewport" id="mapScrollFrame">
-                <div class="big-map-canvas">
+            <div class="map-viewport" id="mapFrame">
+                <div class="map-canvas" id="mapCanvasTarget">
                     
-                    <!-- SVG Spojnice a Vlakové Koridory -->
                     <svg class="map-svg-layer">
-                        <!-- AI Železnice - Hlavní tahy přes celou mapu -->
-                        <path d="M 750,1450 L 1500,1200 L 2650,800 L 2650,300" stroke="#f85149" stroke-width="6" fill="none" stroke-dasharray="12,6" />
-                        <!-- Hlavní Silniční Komunikace pro Autobusy a Trolejbusy -->
-                        <path d="M 1450,200 L 300,750 L 750,1450 L 1500,1200 L 2250,1650" stroke="#30363d" stroke-width="5" fill="none" />
-                        <path d="M 1450,200 L 1950,650 L 2550,300" stroke="#30363d" stroke-width="5" fill="none" />
-                        <path d="M 1500,1200 L 1950,650" stroke="#30363d" stroke-width="4" fill="none" />
+                        <path d="M 100,1200 C 600,1250 1100,1000 1600,1100 C 2100,1200 2500,700 3100,650" stroke="#f85149" stroke-width="4" fill="none" stroke-dasharray="12,6" />
+                        <path d="M 1200,200 C 900,500 500,600 200,900 C 100,1200 400,1600 700,1950 C 1200,2100 1900,2100 2400,2250" stroke="#2c323a" stroke-width="6" fill="none" />
+                        <path d="M 1200,200 C 1600,300 2000,450 2500,350 C 2800,500 3000,800 2900,1100" stroke="#2c323a" stroke-width="6" fill="none" />
+                        <path d="M 700,1950 C 1100,1600 1400,1400 1600,1100 C 1800,800 2100,600 2500,350" stroke="#2c323a" stroke-width="5" fill="none" />
                     </svg>
 
-                    <!-- SEVER -->
-                    <div class="node-box pos-sever">
-                        <h4>Severní oblast <span>#1-4</span></h4>
-                        <ul>
-                            <li><strong>1:</strong> Kaufland (Konečná stanice)</li>
-                            <li><strong>2:</strong> Zahradní</li>
-                            <li><strong>3:</strong> Koupaliště</li>
-                            <li><strong>4:</strong> Barvy (Vilová čtvrť)</li>
-                            <li><strong>33:</strong> Tescoma (Průmyslová zóna)</li>
-                            <li><strong>34:</strong> Výroba SASS</li>
-                            <li><strong>35:</strong> Pivovar Hanclov</li>
-                        </ul>
-                        <div class="node-tags"><span class="badge b-bus">10</span></div>
                     </div>
-
-                    <!-- SEVEROVÝCHOD -->
-                    <div class="node-box pos-vychod-nam">
-                        <h4>Severovýchodní centrum <span>#40-45</span></h4>
-                        <ul>
-                            <li><strong>40:</strong> Hanclov, nákupní středisko</li>
-                            <li><strong>42:</strong> Hanclov, náměstí (Smyčka)</li>
-                            <li><strong>45:</strong> Hanclov, OD (Obchodní dům)</li>
-                        </ul>
-                        <div class="node-tags"><span class="badge b-bus">10</span></div>
-                    </div>
-
-                    <!-- VÝCHODNÍ NÁDRAŽÍ (AI KORIDOR) -->
-                    <div class="node-box pos-vychod-zel">
-                        <h4>Nádraží Hanclov-Východ <span>#46-50</span></h4>
-                        <ul>
-                            <li><strong>46:</strong> Hanclov, žel. st. (východ)</li>
-                            <li><strong>47:</strong> Východní ulice</li>
-                            <li><strong>48:</strong> Staré aut. stanoviště</li>
-                            <li><strong>49:</strong> Hlavní třída</li>
-                            <li><strong>50:</strong> Hlavní (Horské serpentiny)</li>
-                        </ul>
-                        <div class="node-tags">
-                            <span class="badge b-train">S1</span><span class="badge b-train">S2</span>
-                            <span class="badge b-xbus">X1</span><span class="badge b-xbus">X2</span>
-                        </div>
-                    </div>
-
-                    <!-- SÍDLIŠTĚ -->
-                    <div class="node-box pos-sidliste">
-                        <h4>Sídlištní komplex Východ <span>#6-8</span></h4>
-                        <ul>
-                            <li><strong>6:</strong> Sídl. Hanclov (Centrální obratiště)</li>
-                            <li><strong>7:</strong> U Školy / Hájenka</li>
-                            <li><strong>8:</strong> Hanclov, Troja</li>
-                        </ul>
-                        <div class="node-tags"><span class="badge b-bus">11</span><span class="badge b-bus">12</span></div>
-                    </div>
-
-                    <!-- ZÁPADNÍ ČTVRŤ (MĚSTSKÝ SKELET) -->
-                    <div class="node-box pos-zapad-oc">
-                        <h4>Západní městský obvod <span>#20-31</span></h4>
-                        <ul>
-                            <li><strong>20:</strong> ZŠ Englišova</li><li><strong>21:</strong> SŠ Zemědělská</li>
-                            <li><strong>22:</strong> Zemědělská, rozcestí (Závorový přejezd)</li>
-                            <li><strong>23:</strong> Polní</li><li><strong>24:</strong> OC Král. M. (Hlavní uzel)</li>
-                            <li><strong>25:</strong> OC zóna</li><li><strong>26:</strong> Iris (Soukenická)</li>
-                            <li><strong>27:</strong> Muzeum</li><li><strong>28:</strong> Muzeum MHD (Zrušeno - Kulisa)</li>
-                            <li><strong>29:</strong> Výstavní hala</li><li><strong>30:</strong> Výstavní hala MAM</li>
-                            <li><strong>31:</strong> Výstavní hala TUL</li><li><strong>61:</strong> Antická I</li><li><strong>62:</strong> Antická II</li>
-                        </ul>
-                        <div class="node-tags"><span class="badge b-bus">12</span><span class="badge b-trolej">21</span></div>
-                    </div>
-
-                    <!-- CENTRÁLNÍ STŘED (BENZINA KŘIŽOVATKA) -->
-                    <div class="node-box pos-stred">
-                        <h4>Centrální uzel Benzina <span>#5-16</span></h4>
-                        <ul>
-                            <li><strong>5:</strong> Hrnčířská 102/57</li><li><strong>12:</strong> Hanclov, hřbitov</li>
-                            <li><strong>13:</strong> Benzina čerp. stanice (Přestupy)</li>
-                            <li><strong>14:</strong> Svatoplukova</li><li><strong>15:</strong> U Řeky (Mostní spline)</li>
-                            <li><strong>16:</strong> 25. Února</li><li><strong>36:</strong> Cukrovar</li>
-                            <li><strong>39:</strong> SUS (Správa silnic)</li><li><strong>54:</strong> Křižovatka Jih</li>
-                            <li><strong>55:</strong> Pod Skálou</li><li><strong>56:</strong> Nábřeží</li>
-                            <li><strong>57:</strong> Průmyslová spojka</li><li><strong>58:</strong> Stará Valcha</li>
-                            <li><strong>59:</strong> Skladová zóna</li><li><strong>60:</strong> Vpravo</li>
-                        </ul>
-                        <div class="node-tags"><span class="badge b-bus">10</span><span class="badge b-bus">11</span></div>
-                    </div>
-
-                    <!-- HLAVNÍ NÁDRAŽÍ JIH -->
-                    <div class="node-box pos-hlavni-zel">
-                        <h4>Hanclov, Hlavní Nádraží <span>#17-19</span></h4>
-                        <ul>
-                            <li><strong>17:</strong> Sídl. Hanclov (jih)</li>
-                            <li><strong>18:</strong> Hanclov, žel. st. (Velká točna)</li>
-                            <li><strong>19:</strong> Nádražní / Bohunická</li>
-                            <li><strong>32:</strong> Výstavní, žel. zast. (Uzel s Trolejbusy)</li>
-                            <li><strong>37:</strong> Pod Hradem</li><li><strong>38:</strong> Zámecká</li>
-                            <li><strong>41:</strong> Vičínská silnice</li><li><strong>43:</strong> Lesní kolonáda</li>
-                            <li><strong>44:</strong> Pod Lesem</li><li><strong>51:</strong> ZUŠ Hanclov</li>
-                            <li><strong>52:</strong> Čtvrťová, mýto</li><li><strong>53:</strong> Výroba, chem. perníček</li>
-                        </ul>
-                        <div class="node-tags">
-                            <span class="badge b-train">S1</span><span class="badge b-train">R55</span>
-                            <span class="badge b-xbus">X1</span><span class="badge b-trolej">21</span>
-                        </div>
-                    </div>
-
-                    <!-- JIŽNÍ CHRLICE -->
-                    <div class="node-box pos-jih-chrlice">
-                        <h4>Jižní sektor Chrlice <span>#9-11</span></h4>
-                        <ul>
-                            <li><strong>9:</strong> Chrlice, nákupní c. (Kruhový objezd)</li>
-                            <li><strong>10:</strong> Chrlice, rozcestí</li>
-                            <li><strong>11:</strong> rozc. Chrlice</li>
-                        </ul>
-                        <div class="node-tags"><span class="badge b-bus">11</span></div>
-                    </div>
-
-                </div>
             </div>
 
-            <!-- INFOPANEL V ROZHU MAPY -->
-            <div class="map-overlay-info">
-                <h5>Ovládání mapy</h5>
-                <ul>
-                    <li>Posun: Použijte posuvníky / tažení</li>
-                    <li>Červená čára: AI Vlaková trať</li>
-                    <li>Šedá čára: Silniční síť</li>
-                </ul>
+            <div class="map-legend">
+                <h5>Legenda sítě</h5>
+                <div><div class="line-indicator" style="background-color: var(--train-color); stroke-dasharray: 4,2; height:2px; border:1px dashed var(--train-color)"></div> AI Vlaky (S1, S2, R55)</div>
+                <div><div class="line-indicator" style="background-color: var(--xbus-color)"></div> Náhradní doprava (X1, X2)</div>
+                <div><div class="line-indicator" style="background-color: var(--bus-color)"></div> Autobusové linky (10, 11, 12)</div>
+                <div><div class="line-indicator" style="background-color: var(--trolej-color)"></div> Trolejbusová linka (21)</div>
             </div>
         </div>
 
-        <!-- STRÁNKA 2: LINKY A NAD -->
         <div id="linky-page" class="page">
             <div class="scrollable-content">
-                <div class="panel-card">
-                    <h2>Přehled dopravního systému Hanclov</h2>
-                    <p>Městská hromadná doprava sestává z autobusů, trolejbusů a linek náhradní dopravy za plně automatizované AI vlaky.</p>
+                <div class="gui-card">
+                    <h2>Přehled linkového vedení v Hanclově</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 24px;">Všechny vlakové spoje jsou provozovány výhradně autonomní AI technologií OMSI. Pro hráče jsou určeny městské autobusy, trolejbusy a operativní linky NAD.</p>
                     
-                    <div class="table-wrap">
-                        <table>
+                    <div class="gui-table-wrapper">
+                        <table class="gui-table">
                             <thead>
                                 <tr>
                                     <th>Linka</th>
-                                    <th>Kategorie</th>
-                                    <th>Kompletní Trasa</th>
-                                    <th>Interval</th>
+                                    <th>Druh dopravy</th>
+                                    <th>Zastávkový itinerář (Trasování)</th>
+                                    <th>Provozní interval</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td><span class="badge b-train">S1</span></td>
-                                    <td>AI Vlakový spoj</td>
-                                    <td>Hlavní Nádraží (18) ⇄ Výstavní, žel. zast. (32) ⇄ Nádraží Východ (46)</td>
-                                    <td>30 min</td>
+                                    <td><strong>AI Vlak</strong></td>
+                                    <td>Hanclov, žel. st. (18) ⇄ Výstavní, žel. zast. (32) ⇄ Hanclov, žel. st. (východ) (46)</td>
+                                    <td>30 minut</td>
                                 </tr>
                                 <tr>
                                     <td><span class="badge b-train">S2</span></td>
-                                    <td>AI Vlakový spoj</td>
-                                    <td>Nádraží Východ (46) ⇄ Horský koridor ⇄ Směr Hrbáčov (mimo mapu)</td>
-                                    <td>30 min</td>
+                                    <td><strong>AI Vlak</strong></td>
+                                    <td>Hanclov, žel. st. (východ) (46) ⇄ Východní ulice (47) ⇄ Směr Hrbáčov (mimo mapu)</td>
+                                    <td>30 minut</td>
                                 </tr>
                                 <tr>
                                     <td><span class="badge b-train">R55</span></td>
-                                    <td>AI Rychlík</td>
-                                    <td>Hlavní Nádraží (18) ⇄ Nádraží Východ (46) [Projíždí zastávku 32 bez zastavení]</td>
-                                    <td>60 min</td>
+                                    <td><strong>AI Rychlík</strong></td>
+                                    <td>Hanclov, žel. st. (18) ⇄ Hanclov, žel. st. (východ) (46) <span style="color: var(--train-color); font-size:0.8rem;">[Projíždí body 17, 19, 32]</span></td>
+                                    <td>60 minut</td>
                                 </tr>
-                                <tr style="background-color: rgba(210, 153, 34, 0.05);">
-                                    <td><span class="badge b-xbus">X1</span></td>
-                                    <td>Náhradní autobus (NAD)</td>
-                                    <td>Hlavní Nádraží (18) ⇄ Výstavní (32) ⇄ Nádraží Východ (46) [Kopíruje koleje]</td>
-                                    <td>30 min</td>
+                                <tr style="background-color: rgba(210, 153, 34, 0.03);">
+                                    <td><span class="badge b-nad">X1</span></td>
+                                    <td><strong>Náhradní Bus (NAD)</strong></td>
+                                    <td>Hanclov, žel. st. (18) ⇄ Výstavní, žel. zast. (32) ⇄ Hanclov, žel. st. (východ) (46)</td>
+                                    <td>30 minut</td>
                                 </tr>
-                                <tr style="background-color: rgba(210, 153, 34, 0.05);">
-                                    <td><span class="badge b-xbus">X2</span></td>
-                                    <td>Náhradní autobus (NAD)</td>
-                                    <td>Nádraží Východ (46) ⇄ Hlavní serpentiny (50) ⇄ Hrbáčov (Výlukový spoj)</td>
-                                    <td>30 min</td>
+                                <tr style="background-color: rgba(210, 153, 34, 0.03);">
+                                    <td><span class="badge b-nad">X2</span></td>
+                                    <td><strong>Náhradní Bus (NAD)</strong></td>
+                                    <td>Hanclov, žel. st. (východ) (46) ⇄ Hlavní (serpentiny) (50) ⇄ Hrbáčov</td>
+                                    <td>30 minut</td>
                                 </tr>
                                 <tr>
                                     <td><span class="badge b-bus">10</span></td>
-                                    <td>Městský autobus</td>
-                                    <td>Kaufland (1) ⇄ Koupaliště (3) ⇄ Benzina (13) ⇄ Hanclov, náměstí (42)</td>
-                                    <td>15 min</td>
+                                    <td>Městský Autobus</td>
+                                    <td>Kaufland (1) ⇄ Koupaliště (3) ⇄ Benzina čerp. stanice (13) ⇄ Hanclov, náměstí (42)</td>
+                                    <td>15 minut</td>
                                 </tr>
                                 <tr>
                                     <td><span class="badge b-bus">11</span></td>
-                                    <td>Městský autobus</td>
-                                    <td>Chrlice, nákupní c. (9) ⇄ Benzina (13) ⇄ Sídl. Hanclov (6)</td>
-                                    <td>20 min</td>
+                                    <td>Městský Autobus</td>
+                                    <td>Chrlice, nákupní c. (9) ⇄ Benzina čerp. stanice (13) ⇄ Sídl. Hanclov (6)</td>
+                                    <td>20 minut</td>
                                 </tr>
                                 <tr>
                                     <td><span class="badge b-bus">12</span></td>
-                                    <td>Městský autobus</td>
+                                    <td>Městský Autobus</td>
                                     <td>Sídl. Hanclov (6) ⇄ Hanclov, žel. st. (18) ⇄ OC Král. M. (24)</td>
-                                    <td>15 min</td>
+                                    <td>15 minut</td>
                                 </tr>
                                 <tr>
                                     <td><span class="badge b-trolej">21</span></td>
                                     <td>Městský Trolejbus</td>
-                                    <td>Hanclov, žel. st. (18) ⇄ Muzeum (27) ⇄ Výstavní, žel. zast. (32)</td>
-                                    <td>12 min</td>
+                                    <td>Hanclov, žel. st. (18) ⇄ Muzeum (27) ⇄ Muzeum MHD (28) ⇄ Výstavní, žel. zast. (32)</td>
+                                    <td>12 minut</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -592,28 +331,27 @@
             </div>
         </div>
 
-        <!-- STRÁNKA 3: REZIDENČNÍ REGISTR ZASTÁVEK -->
         <div id="registr-page" class="page">
             <div class="scrollable-content">
-                <div class="panel-card">
-                    <h2>Kompletní databáze všech 62 zastávek</h2>
-                    <div class="search-wrapper">
-                        <input type="text" id="stopSearch" class="search-input" onkeyup="searchHandler()" placeholder="🔍 Hledat podle ID, názvu zastávky nebo městské oblasti...">
-                    </div>
+                <div class="gui-card">
+                    <h2>Oficiální databáze a registr zastávek (1 - 62)</h2>
                     
-                    <div class="table-wrap">
-                        <table id="stopsMainTable">
+                    <div class="search-box-container">
+                        <input type="text" id="guiSearch" class="gui-search-input" onkeyup="filterStopsTable()" placeholder="🔍 Zadejte ID, název stanice nebo obsluhované linky...">
+                    </div>
+
+                    <div class="gui-table-wrapper">
+                        <table class="gui-table" id="mainStopsTable">
                             <thead>
                                 <tr>
-                                    <th style="width: 100px;">Index / ID</th>
-                                    <th>Název v HOF souboru</th>
+                                    <th style="width: 90px;">Index ID</th>
+                                    <th>Název v OMSI Editoru / HOF</th>
                                     <th>Typ odbavení</th>
-                                    <th>Příslušný uzel (Klastr)</th>
+                                    <th>Zastavující linky</th>
                                 </tr>
                             </thead>
-                            <tbody id="stopsTableTarget">
-                                <!-- Plněno skriptem -->
-                            </tbody>
+                            <tbody id="tableTargetBody">
+                                </tbody>
                         </table>
                     </div>
                 </div>
@@ -624,112 +362,155 @@
 </div>
 
 <script>
-    // Seznam kompletních 62 zastávek bez jakéhokoliv vynechání pro bezchybnou tvorbu modifikace
-    const stopsArray = [
-        {id: 1, name: "Kaufland", type: "Stálá - Točna", region: "Sever (Kaufland & Průmysl)"},
-        {id: 2, name: "Zahradní", type: "Na znamení", region: "Sever (Kaufland & Průmysl)"},
-        {id: 3, name: "Koupaliště", type: "Stálá", region: "Sever (Kaufland & Průmysl)"},
-        {id: 4, name: "Barvy (Vilová)", type: "Stálá", region: "Sever (Kaufland & Průmysl)"},
-        {id: 5, name: "Hrnčířská 102/57", type: "Na znamení", region: "Centrální uzel (Benzina)"},
-        {id: 6, name: "Sídl. Hanclov", type: "Stálá - Točna", region: "Sídl. Hanclov (Východ)"},
-        {id: 7, name: "U Školy / Hájenka", type: "Stálá", region: "Sídl. Hanclov (Východ)"},
-        {id: 8, name: "Hanclov, Troja", type: "Stálá - Točna", region: "Sídl. Hanclov (Východ)"},
-        {id: 9, name: "Chrlice, nákupní c.", type: "Stálá - Točna", region: "Jižní sektor (Chrlice)"},
-        {id: 10, name: "Chrlice, rozcestí", type: "Na znamení", region: "Jižní sektor (Chrlice)"},
-        {id: 11, name: "rozc. Chrlice", type: "Na znamení", region: "Jižní sektor (Chrlice)"},
-        {id: 12, name: "Hanclov, hřbitov", type: "Stálá", region: "Centrální uzel (Benzina)"},
-        {id: 13, name: "Benzina čerp. stanice", type: "Stálá - Hlavní přestup", region: "Centrální uzel (Benzina)"},
-        {id: 14, name: "Svatoplukova", type: "Na znamení", region: "Centrální uzel (Benzina)"},
-        {id: 15, name: "U Řeky", type: "Stálá", region: "Centrální uzel (Benzina)"},
-        {id: 16, name: "25. Února", type: "Stálá", region: "Centrální uzel (Benzina)"},
-        {id: 17, name: "Sídl. Hanclov (jih)", type: "Stálá", region: "Hanclov, hlavní nádraží (Jih)"},
-        {id: 18, name: "Hanclov, žel. st.", type: "Stálá - Točna", region: "Hanclov, hlavní nádraží (Jih)"},
-        {id: 19, name: "Nádražní / Bohunická", type: "Na znamení", region: "Hanclov, hlavní nádraží (Jih)"},
-        {id: 20, name: "ZŠ Englišova", type: "Stálá", region: "Západní městská čtvrť"},
-        {id: 21, name: "SŠ Zemědělská", type: "Stálá", region: "Západní městská čtvrť"},
-        {id: 22, name: "Zemědělská, rozcestí", type: "Stálá (Přejezd)", region: "Západní městská čtvrť"},
-        {id: 23, name: "Polní", type: "Stálá", region: "Západní městská čtvrť"},
-        {id: 24, name: "OC Král. M.", type: "Stálá - Točna", region: "Západní městská čtvrť"},
-        {id: 25, name: "OC zóna", type: "Stálá", region: "Západní městská čtvrť"},
-        {id: 26, name: "Iris (Soukenická)", type: "Na znamení", region: "Západní městská čtvrť"},
-        {id: 27, name: "Muzeum", type: "Na znamení", region: "Západní městská čtvrť"},
-        {id: 28, name: "Muzeum MHD", type: "Zrušená historická kulisa", region: "Západní městská čtvrť"},
-        {id: 29, name: "Výstavní hala", type: "Stálá", region: "Západní městská čtvrť"},
-        {id: 30, name: "Výstavní hala MAM", type: "Na znamení", region: "Západní městská čtvrť"},
-        {id: 31, name: "Výstavní hala TUL", type: "Na znamení", region: "Západní městská čtvrť"},
-        {id: 32, name: "Výstavní, žel. zast.", type: "Stálá", region: "Hanclov, hlavní nádraží (Jih)"},
-        {id: 33, name: "Tescoma", type: "Na znamení", region: "Sever (Kaufland & Průmysl)"},
-        {id: 34, name: "Výroba SASS", type: "Na znamení", region: "Sever (Kaufland & Průmysl)"},
-        {id: 35, name: "Pivovar", type: "Na znamení", region: "Sever (Kaufland & Průmysl)"},
-        {id: 36, name: "Cukrovar", type: "Na znamení", region: "Centrální uzel (Benzina)"},
-        {id: 37, name: "Pod Hradem", type: "Na znamení", region: "Hanclov, hlavní nádraží (Jih)"},
-        {id: 38, name: "Zámecká", type: "Stálá", region: "Hanclov, hlavní nádraží (Jih)"},
-        {id: 39, name: "SUS", type: "Stálá", region: "Centrální uzel (Benzina)"},
-        {id: 40, name: "Hanclov, nákupní s.", type: "Stálá", region: "Severovýchodni centrum"},
-        {id: 41, name: "Vičínská silnice", type: "Na znamení", region: "Hanclov, hlavní nádraží (Jih)"},
-        {id: 42, name: "Hanclov, náměstí", type: "Stálá - Točna", region: "Severovýchodni centrum"},
-        {id: 43, name: "Lesní kolonáda", type: "Stálá", region: "Hanclov, hlavní nádraží (Jih)"},
-        {id: 44, name: "Pod Lesem", type: "Na znamení", region: "Hanclov, hlavní nádraží (Jih)"},
-        {id: 45, name: "Hanclov, OD", type: "Stálá", region: "Severovýchodni centrum"},
-        {id: 46, name: "Hanclov, žel. st. (východ)", type: "Stálá - Nádražní točna", region: "Nádraží Hanclov-Východ"},
-        {id: 47, name: "Východní ulice", type: "Stálá", region: "Nádraží Hanclov-Východ"},
-        {id: 48, name: "Staré aut. stanoviště", type: "Stálá", region: "Nádraží Hanclov-Východ"},
-        {id: 49, name: "Hlavní", type: "Na znamení", region: "Nádraží Hanclov-Východ"},
-        {id: 50, name: "Hlavní (serpentiny)", type: "Na znamení (Horská)", region: "Nádraží Hanclov-Východ"},
-        {id: 51, name: "ZUŠ Hanclov", type: "Stálá", region: "Hanclov, hlavní nádraží (Jih)"},
-        {id: 52, name: "Čtvrťová, mýto", type: "Na znamení", region: "Hanclov, hlavní nádraží (Jih)"},
-        {id: 53, name: "Výroba, chem. perníček", type: "Na znamení", region: "Hanclov, hlavní nádraží (Jih)"},
-        {id: 54, name: "Křižovatka Jih", type: "Stálá", region: "Centrální uzel (Benzina)"},
-        {id: 55, name: "Pod Skálou", type: "Na znamení", region: "Centrální uzel (Benzina)"},
-        {id: 56, name: "Nábřeží", type: "Stálá", region: "Centrální uzel (Benzina)"},
-        {id: 57, name: "Průmyslová spojka", type: "Na znamení", region: "Centrální uzel (Benzina)"},
-        {id: 58, name: "Stará Valcha", type: "Na znamení", region: "Centrální uzel (Benzina)"},
-        {id: 59, name: "Skladová zóna", type: "Stálá", region: "Centrální uzel (Benzina)"},
-        {id: 60, name: "Vpravo", type: "Stálá (Smyčka)", region: "Centrální uzel (Benzina)"},
-        {id: 61, name: "Antická I", type: "Stálá", region: "Západní městská čtvrť"},
-        {id: 62, name: "Antická II", type: "Stálá", region: "Západní městská čtvrť"}
+    // Kompletní datová struktura pro všech 62 zastávek rozložených v plynulé geometrii na plátně 3200x2400
+    const masterStops = [
+        {id: 1, name: "Kaufland", type: "Stálá - Točna", lines: ["10"], x: 1200, y: 200},
+        {id: 2, name: "Zahradní", type: "Na znamení", lines: ["10"], x: 1050, y: 350},
+        {id: 3, name: "Koupaliště", type: "Stálá", lines: ["10"], x: 950, y: 440},
+        {id: 4, name: "Barvy (Vilová)", type: "Stálá", lines: ["10"], x: 800, y: 520},
+        {id: 5, name: "Hrnčířská 102/57", type: "Na znamení", lines: ["10", "11"], x: 720, y: 600},
+        {id: 6, name: "Sídl. Hanclov", type: "Stálá - Točna", lines: ["11", "12"], x: 2500, y: 350},
+        {id: 7, name: "U Školy / Hájenka", type: "Stálá", lines: ["11", "12"], x: 2300, y: 400},
+        {id: 8, name: "Hanclov, Troja", type: "Stálá", lines: ["12"], x: 2150, y: 450},
+        {id: 9, name: "Chrlice, nákupní c.", type: "Stálá - Točna", lines: ["11"], x: 2400, y: 2250},
+        {id: 10, name: "Chrlice, rozcestí", type: "Na znamení", lines: ["11"], x: 2200, y: 2150},
+        {id: 11, name: "rozc. Chrlice", type: "Na znamení", lines: ["11"], x: 2000, y: 2110},
+        {id: 12, name: "Hanclov, hřbitov", type: "Stálá", lines: ["10", "11"], x: 1800, y: 2080},
+        {id: 13, name: "Benzina čerp. stanice", type: "Stálá - Centrální uzel", lines: ["10", "11"], x: 1600, y: 2050},
+        {id: 14, name: "Svatoplukova", type: "Na znamení", lines: ["10"], x: 1400, y: 1900},
+        {id: 15, name: "U Řeky", type: "Stálá", lines: ["10"], x: 1250, y: 1750},
+        {id: 16, name: "25. Února", type: "Stálá", lines: ["10"], x: 1100, y: 1600},
+        {id: 17, name: "Sídl. Hanclov (jih)", type: "Stálá", lines: ["12"], x: 850, y: 1750},
+        {id: 18, name: "Hanclov, žel. st.", type: "Stálá - Hlavní nádraží", lines: ["S1", "R55", "X1", "12", "21"], x: 700, y: 1950},
+        {id: 19, name: "Nádražní / Bohunická", type: "Na znamení", lines: ["12", "21"], x: 550, y: 1800},
+        {id: 20, name: "ZŠ Englišova", type: "Stálá", lines: ["12"], x: 400, y: 1600},
+        {id: 21, name: "SŠ Zemědělská", type: "Stálá", lines: ["12"], x: 300, y: 1450},
+        {id: 22, name: "Zemědělská, rozcestí", type: "Stálá", lines: ["12"], x: 200, y: 1300},
+        {id: 23, name: "Polní", type: "Stálá", lines: ["12"], x: 100, y: 1200},
+        {id: 24, name: "OC Král. M.", type: "Stálá - Točna", lines: ["12"], x: 200, y: 900},
+        {id: 25, name: "OC zóna", type: "Stálá", lines: ["12"], x: 350, y: 750},
+        {id: 26, name: "Iris (Soukenická)", type: "Na znamení", lines: ["21"], x: 500, y: 600},
+        {id: 27, name: "Muzeum", type: "Na znamení", lines: ["21"], x: 650, y: 720},
+        {id: 28, name: "Muzeum MHD", type: "Stálá - Muzejní expozice", lines: ["21"], x: 800, y: 810},
+        {id: 29, name: "Výstavní hala", type: "Stálá", lines: ["21"], x: 950, y: 900},
+        {id: 30, name: "Výstavní hala MAM", type: "Na znamení", lines: ["21"], x: 1100, y: 980},
+        {id: 31, name: "Výstavní hala TUL", type: "Na znamení", lines: ["21"], x: 1250, y: 1040},
+        {id: 32, name: "Výstavní, žel. zast.", type: "Stálá - Uzel", lines: ["S1", "X1", "21"], x: 1600, y: 1100},
+        {id: 33, name: "Tescoma", type: "Na znamení", lines: ["10"], x: 1350, y: 250},
+        {id: 34, name: "Výroba SASS", type: "Na znamení", lines: ["10"], x: 1500, y: 280},
+        {id: 35, name: "Pivovar", type: "Na znamení", lines: ["10"], x: 1650, y: 310},
+        {id: 36, name: "Cukrovar", type: "Na znamení", lines: ["11"], x: 1750, y: 500},
+        {id: 37, name: "Pod Hradem", type: "Na znamení", lines: ["11"], x: 1900, y: 650},
+        {id: 38, name: "Zámecká", type: "Stálá", lines: ["11"], x: 2050, y: 750},
+        {id: 39, name: "SUS", type: "Stálá", lines: ["11"], x: 2200, y: 830},
+        {id: 40, name: "Hanclov, nákupní s.", type: "Stálá", lines: ["10"], x: 2700, y: 450},
+        {id: 41, name: "Vičínská silnice", type: "Na znamení", lines: ["10"], x: 2850, y: 550},
+        {id: 42, name: "Hanclov, náměstí", type: "Stálá - Točna", lines: ["10"], x: 2900, y: 1100},
+        {id: 43, name: "Lesní kolonáda", type: "Stálá", lines: ["X2"], x: 3000, y: 950},
+        {id: 44, name: "Pod Lesem", type: "Na znamení", lines: ["X2"], x: 3050, y: 800},
+        {id: 45, name: "Hanclov, OD", type: "Stálá", lines: ["10"], x: 2750, y: 1250},
+        {id: 46, name: "Hanclov, žel. st. (východ)", type: "Stálá - Točna", lines: ["S1", "S2", "R55", "X1", "X2"], x: 2500, y: 700},
+        {id: 47, name: "Východní ulice", type: "Stálá", lines: ["S2", "X2"], x: 2650, y: 800},
+        {id: 48, name: "Staré aut. stanoviště", type: "Stálá", lines: ["X2"], x: 2400, y: 900},
+        {id: 49, name: "Hlavní", type: "Na znamení", lines: ["X2"], x: 2300, y: 1050},
+        {id: 50, name: "Hlavní (serpentiny)", type: "Na znamení", lines: ["X2"], x: 2200, y: 1200},
+        {id: 51, name: "ZUŠ Hanclov", type: "Stálá", lines: ["11"], x: 2100, y: 1350},
+        {id: 52, name: "Čtvrťová, mýto", type: "Na znamení", lines: ["11"], x: 2000, y: 1500},
+        {id: 53, name: "Výroba, chem. perníček", type: "Na znamení", lines: ["11"], x: 1900, y: 1650},
+        {id: 54, name: "Křižovatka Jih", type: "Stálá", lines: ["11"], x: 1750, y: 1800},
+        {id: 55, name: "Pod Skálou", type: "Na znamení", lines: ["11"], x: 1650, y: 1920},
+        {id: 56, name: "Nábřeží", type: "Stálá", lines: ["12"], x: 1450, y: 1400},
+        {id: 57, name: "Průmyslová spojka", type: "Na znamení", lines: ["12"], x: 1350, y: 1500},
+        {id: 58, name: "Stará Valcha", type: "Na znamení", lines: ["12"], x: 1250, y: 1600},
+        {id: 59, name: "Skladová zóna", type: "Stálá", lines: ["12"], x: 1150, y: 1700},
+        {id: 60, name: "Vpravo", type: "Stálá - Smyčka", lines: ["12"], x: 1000, y: 1820},
+        {id: 61, name: "Antická I", type: "Stálá", lines: ["21"], x: 600, y: 1100},
+        {id: 62, name: "Antická II", type: "Stálá", lines: ["21"], x: 500, y: 1250}
     ];
 
-    // Výpis pole do HTML tabulky registru
-    const tableBody = document.getElementById('stopsTableTarget');
-    stopsArray.forEach(stop => {
+    // Pomocná metoda pro obarvení odznaků linek
+    function getLineClass(line) {
+        if(["S1","S2","R55"].includes(line)) return 'mb-tr';
+        if(["X1","X2"].includes(line)) return 'mb-nad';
+        if(["10","11","12"].includes(line)) return 'mb-bus';
+        if(["21"].includes(line)) return 'mb-tro';
+        return '';
+    }
+
+    // Injekce všech 62 zastávek přímo na mapové plátno
+    const canvas = document.getElementById('mapCanvasTarget');
+    masterStops.forEach(stop => {
+        const node = document.createElement('div');
+        node.className = 'stop-node';
+        if(stop.lines.some(l => ["S1","S2","R55"].includes(l))) node.classList.add('has-train');
+        if(stop.lines.some(l => ["X1","X2"].includes(l))) node.classList.add('has-nad');
+        
+        node.style.left = stop.x + 'px';
+        node.style.top = stop.y + 'px';
+
+        let linesHTML = '';
+        stop.lines.forEach(l => {
+            linesHTML += `<span class="m-badge ${getLineClass(l)}">${l}</span>`;
+        });
+
+        node.innerHTML = `
+            <div class="stop-dot"></div>
+            <span class="stop-title">[${stop.id}] ${stop.name}</span>
+            <div class="stop-lines">${linesHTML}</div>
+        `;
+        canvas.appendChild(node);
+    });
+
+    // Injekce dat do velkého přehledného registru zastávek
+    const tableBody = document.getElementById('tableTargetBody');
+    masterStops.forEach(stop => {
         const row = document.createElement('tr');
-        row.innerHTML = `<td><strong>${stop.id}</strong></td><td>${stop.name}</td><td>${stop.type}</td><td>${stop.region}</td>`;
+        
+        let badgesHTML = '';
+        stop.lines.forEach(l => {
+            let bStyle = 'b-bus';
+            if(["S1","S2","R55"].includes(l)) bStyle = 'b-train';
+            if(["X1","X2"].includes(l)) bStyle = 'b-nad';
+            if(["21"].includes(l)) bStyle = 'b-trolej';
+            badgesHTML += `<span class="badge ${bStyle}">${l}</span> `;
+        });
+
+        row.innerHTML = `
+            <td><strong>#${stop.id}</strong></td>
+            <td>${stop.name}</td>
+            <td><span style="color: var(--text-muted); font-size:0.85rem;">${stop.type}</span></td>
+            <td>${badgesHTML}</td>
+        `;
         tableBody.appendChild(row);
     });
 
-    // Filtrovací vyhledávací algoritmus
-    function searchHandler() {
-        const query = document.getElementById('stopSearch').value.toLowerCase();
+    // Filtrovací funkce v registru zastávek
+    function filterStopsTable() {
+        const val = document.getElementById('guiSearch').value.toLowerCase();
         const rows = tableBody.getElementsByTagName('tr');
-        
         for (let i = 0; i < rows.length; i++) {
-            const rowContent = rows[i].textContent.toLowerCase();
-            rows[i].style.display = rowContent.includes(query) ? '' : 'none';
+            rows[i].style.display = rows[i].textContent.toLowerCase().includes(val) ? '' : 'none';
         }
     }
 
-    // Přepínání karet (Záložek v menu)
+    // Navigační přepínač stránek
     function changeTab(pageId) {
-        document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-        document.querySelectorAll('.menu-btn').forEach(btn => btn.classList.remove('active'));
-        
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
         event.currentTarget.classList.add('active');
     }
 
-    // Funkce pro kolaps/schování bočního panelu
     function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('collapsed');
+        document.getElementById('sidebar').classList.toggle('collapsed');
     }
 
-    // Automatické optimální napolohování kamery na obří mapě po zapnutí webu
+    // Po načtení vycentrujeme pohled na střed mapy, kde je uzel s Muzeem MHD
     window.onload = function() {
-        const frame = document.getElementById('mapScrollFrame');
-        if (frame) {
-            frame.scrollLeft = 950;
-            frame.scrollTop = 550;
+        const frame = document.getElementById('mapFrame');
+        if(frame) {
+            frame.scrollLeft = 600;
+            frame.scrollTop = 700;
         }
     };
 </script>
