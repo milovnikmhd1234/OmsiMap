@@ -3,147 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OMSI 2 Mod – Projekt Kratochvílice</title>
+    <title>OMSI 2 – Projekt Kratochvílice (Webová dokumentace)</title>
     <style>
         :root {
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --text-color: #333;
-            --tram-color: #e74c3c;
-            --bus-color: #3498db;
-            --trolej-color: #2ecc71;
-            --suburban-color: #f1c40f;
-            --train-color: #9b59b6;
+            --bg-color: #0f111a;
+            --card-bg: #1a1c24;
+            --text-color: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-color: #2d3142;
+            --accent-primary: #38bdf8;
+            
+            /* Barvy dopravy */
+            --train-color: #ef4444; /* ČERVENÉ ČÁRY = VLAKY */
+            --tram-color: #f97316;  /* Tramvaje */
+            --bus-color: #3b82f6;   /* Autobusy */
+            --trolej-color: #10b981;/* Trolejbusy */
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            padding: 0;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 20px;
         }
 
         header {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            padding: 30px 20px;
+            border-radius: 12px;
             text-align: center;
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            color: white;
-            padding: 30px;
-            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        header h1 { margin: 0; font-size: 2.5em; color: #fff; }
+        header p { margin: 10px 0 0 0; color: var(--text-muted); font-size: 1.1em; }
+
+        /* NAVIGACE / STRÁNKY (ZÁLOŽKY) */
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
             margin-bottom: 25px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        header h1 { margin: 0; font-size: 2.5em; }
-        header p { margin: 10px 0 0 0; opacity: 0.9; font-style: italic; }
-
-        h2 {
-            color: #2c3e50;
-            border-bottom: 2px solid #bdc3c7;
-            padding-bottom: 8px;
-            margin-top: 30px;
+        .nav-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 12px 24px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        .grid-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
+        .nav-btn:hover {
+            color: #fff;
+            border-color: var(--accent-primary);
+        }
+
+        .nav-btn.active {
+            background-color: var(--accent-primary);
+            color: #000;
+            border-color: var(--accent-primary);
+        }
+
+        /* STRÁNKY OBSAHU */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
         }
 
         .card {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            border-left: 5px solid #2c3e50;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            margin-bottom: 20px;
         }
 
-        /* Styl pro linky */
-        .line-badge {
+        .card h2 { margin-top: 0; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; color: #fff; }
+
+        /* ODZNAKY LINEK */
+        .badge {
             display: inline-block;
-            color: white;
-            padding: 3px 8px;
+            padding: 4px 10px;
+            font-weight: bold;
             border-radius: 4px;
-            font-weight: bold;
+            color: #fff;
+            font-size: 0.9em;
             margin-right: 5px;
-            margin-bottom: 5px;
         }
-        .tram { background-color: var(--tram-color); }
-        .bus { background-color: var(--bus-color); }
-        .trolej { background-color: var(--trolej-color); }
-        .suburban { background-color: var(--suburban-color); color: #333; }
-        .train { background-color: var(--train-color); }
+        .badge-train { background-color: var(--train-color); }
+        .badge-tram { background-color: var(--tram-color); }
+        .badge-bus { background-color: var(--bus-color); }
+        .badge-trolej { background-color: var(--trolej-color); }
 
-        /* Mapa sítě pomocí CSS */
-        .map-container {
-            background: #2c3e50;
-            color: white;
-            padding: 20px;
-            border-radius: 8px;
+        /* TABULKY */
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th { background-color: #11131c; color: #fff; }
+        tr:nth-child(even) td { background-color: rgba(255,255,255,0.01); }
+        tr:hover td { background-color: rgba(255,255,255,0.03); }
+
+        /* VYLEPŠENÁ POSOUVACÍ MAPA */
+        .map-viewport {
+            width: 100%;
+            height: 600px;
+            background-color: #0b0c10;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            overflow: auto; /* Zajišťuje posouvání (scrollbars) */
             position: relative;
-            min-height: 400px;
-            margin-top: 20px;
-            overflow-x: auto;
+            cursor: grab;
         }
 
-        .map-title {
-            margin-top: 0;
-            font-size: 1.2em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .map-viewport:active { cursor: grabbing; }
+
+        /* Samotné plátno mapy - je schválně větší než okno, aby se dalo posouvat */
+        .map-canvas {
+            width: 1600px;
+            height: 1000px;
+            position: relative;
+            background-image: radial-gradient(#1e2230 1px, transparent 1px);
+            background-size: 24px 24px;
         }
 
-        /* Grafické uzly zastávek */
-        .station {
+        .map-node {
             position: absolute;
-            background: #fff;
-            color: #333;
-            padding: 10px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 0.9em;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            min-width: 150px;
-            text-align: center;
+            background-color: #222531;
+            border: 2px solid #4a526d;
+            border-radius: 8px;
+            padding: 12px;
+            width: 240px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+            z-index: 5;
         }
 
-        .station .lines {
-            margin-top: 5px;
-            display: flex;
-            justify-content: center;
-            gap: 3px;
-            font-size: 0.75em;
-        }
+        .map-node h4 { margin: 0 0 5px 0; color: #fff; font-size: 1.05em; }
+        .map-node p { margin: 0 0 8px 0; font-size: 0.85em; color: var(--text-muted); }
 
-        /* Pozice zastávek na fiktivní mapě */
-        #kratochvilice { top: 50px; left: 40%; }
-        #janovice { top: 250px; left: 15%; }
-        #hrbacov { top: 250px; left: 65%; }
+        /* Přesné souřadnice uzlů na posouvacím plátnu (kopíruje papírový nákres) */
+        .n-kaufland      { top: 80px;  left: 600px; }
+        .n-vicin-nam     { top: 120px; left: 1250px; }
+        .n-vicin-zel     { top: 380px; left: 1280px; border-color: var(--train-color); }
+        .n-sidl-bohunice { top: 320px; left: 850px; }
+        .n-oc-kral       { top: 450px; left: 100px; }
+        .n-benzina       { top: 700px; left: 680px; }
+        .n-bohunice-zel  { top: 780px; left: 250px; border-color: var(--train-color); }
+        .n-chrlice       { top: 820px; left: 1100px; }
 
-        /* Propojovací čáry (fiktivní linky) */
-        .map-line {
+        .map-svg {
             position: absolute;
-            background: #fff;
-            opacity: 0.4;
-            z-index: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
         }
-        .line-1 { top: 120px; left: 25%; width: 20%; height: 2px; transform: rotate(45deg); background: var(--bus-color); height: 4px; opacity: 0.8;}
-        .line-2 { top: 120px; left: 53%; width: 20%; height: 2px; transform: rotate(-45deg); background: var(--tram-color); height: 4px; opacity: 0.8;}
-        .line-3 { top: 270px; left: 33%; width: 33%; height: 4px; background: var(--train-color); opacity: 0.8;}
 
-        footer {
-            margin-top: 50px;
-            text-align: center;
-            font-size: 0.9em;
-            color: #7f8c8d;
-        }
+        footer { text-align: center; margin-top: 40px; color: var(--text-muted); font-size: 0.9em; padding: 20px; }
     </style>
 </head>
 <body>
@@ -152,88 +190,274 @@
 
     <header>
         <h1>Projekt Kratochvílice</h1>
-        <p>Podklady a koncept pro tvorbu OMSI 2 mapy</p>
+        <p>Koncept a specifikace pro OMSI 2 editor – Městská doprava</p>
     </header>
 
-    <h2>Základní informace</h2>
-    <div class="grid-info">
+    <nav>
+        <button class="nav-btn active" onclick="openPage('mapa')">🗺️ Stránka 1: Mapa sítě</button>
+        <button class="nav-btn" onclick="openPage('linky')">🚏 Stránka 2: Přehled linek</button>
+        <button class="nav-btn" onclick="openPage('zastavky')">📋 Stránka 3: Rejstřík zastávek</button>
+    </nav>
+
+    <div id="mapa" class="page active">
         <div class="card">
-            <h3>Oblasti mapy</h3>
-            <p>Mapa se skládá ze tří hlavních uzlů:</p>
-            <ul>
-                <li><strong>Kratochvílice</strong> (Centrum)</li>
-                <li><strong>Janovice</strong></li>
-                <li><strong>Hrbáčov</strong></li>
-            </ul>
-        </div>
-        <div class="card">
-            <h3>Typy dopravy</h3>
-            <p>Projekt kombinuje městskou, příměstskou i železniční síť pro maximální rozmanitost při řízení.</p>
+            <h2>Interaktivní plán sítě (Posouvací)</h2>
+            <p>Uvnitř boxu níže můžete mapu **posouvat myší (scrollovat)** do stran i dolů. Červené přerušované čáry značí železniční koleje, šedé čáry značí hlavní silniční tahy.</p>
+            
+            <div class="map-viewport" id="viewport">
+                <div class="map-canvas">
+                    
+                    <svg class="map-svg">
+                        <path d="M 370,830 L 800,500 L 1400,430 L 1400,200" stroke="#ef4444" stroke-width="6" fill="none" stroke-dasharray="12,6" />
+                        
+                        <path d="M 720,130 L 220,500 L 370,830 L 800,750 L 1220,870" stroke="#475569" stroke-width="5" fill="none" />
+                        <path d="M 720,130 L 970,370 L 1370,170" stroke="#475569" stroke-width="5" fill="none" />
+                        <path d="M 800,750 L 970,370" stroke="#475569" stroke-width="4" fill="none" />
+                    </svg>
+
+                    <div class="map-node n-kaufland">
+                        <h4>1. Kaufland (Sever)</h4>
+                        <p>Městská severní točna autobusů.</p>
+                        <span class="badge badge-bus">10</span>
+                    </div>
+
+                    <div class="map-node n-vicin-nam">
+                        <h4>42. Vičín, náměstí</h4>
+                        <p>Konečná městských linek na severovýchodě.</p>
+                        <span class="badge badge-bus">10</span>
+                    </div>
+
+                    <div class="map-node n-vicin-zel">
+                        <h4>46. Vičín, žel. st.</h4>
+                        <p>Horní nádraží (Pravá mřížka). Přestup na vlaky.</p>
+                        <span class="badge badge-train">S1</span><span class="badge badge-train">S2</span><span class="badge badge-train">R55</span>
+                    </div>
+
+                    <div class="map-node n-sidl-bohunice">
+                        <h4>6. Sídl. Bohunice</h4>
+                        <p>Sídlištní čtvrť a smyčka na východě mapy.</p>
+                        <span class="badge badge-bus">12</span>
+                    </div>
+
+                    <div class="map-node n-oc-kral">
+                        <h4>24. OC Král. M.</h4>
+                        <p>Levá mřížka. Velký terminál tramvají č. 1 a 2.</p>
+                        <span class="badge badge-tram">1</span><span class="badge badge-tram">2</span>
+                    </div>
+
+                    <div class="map-node n-benzina">
+                        <h4>13. Benzina čerp. st.</h4>
+                        <p>Centrální křižovatková přestupní stanice na jihu.</p>
+                        <span class="badge badge-bus">10</span><span class="badge badge-bus">11</span><span class="badge badge-bus">12</span>
+                    </div>
+
+                    <div class="map-node n-bohunice-zel">
+                        <h4>18. Bohunice, žel. st.</h4>
+                        <p>Spodní hlavní nádraží (Levá dolní mřížka).</p>
+                        <span class="badge badge-train">S1</span><span class="badge badge-train">R55</span><span class="badge badge-trolej">21</span>
+                    </div>
+
+                    <div class="map-node n-chrlice">
+                        <h4>9. Chrlice, nákupní c.</h4>
+                        <p>Smyčka autobusů v pravém dolním rohu u kruháče.</p>
+                        <span class="badge badge-bus">11</span>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 
-    <h2>Přehled linek</h2>
-    <div class="card">
-        <h3><span class="line-badge tram">Tramvaje</span> Tramvajové linky</h3>
-        <p><span class="line-badge tram">1</span>, <span class="line-badge tram">2</span> – Městská páteřní doprava v rámci Kratochvílic.</p>
-
-        <h3><span class="line-badge bus">Autobusy</span> Městské autobusy</h3>
-        <p><span class="line-badge bus">10</span>, <span class="line-badge bus">11</span>, <span class="line-badge bus">12</span>, <span class="line-badge bus">13</span> – Obsluha sídlišť a okrajových částí.</p>
-
-        <h3><span class="line-badge trolej">Trolejbusy</span> Trolejbusová linka</h3>
-        <p><span class="line-badge trolej">21</span> – Speciální kopcovitá nebo ekologická trasa přes centrum.</p>
-
-        <h3><span class="line-badge suburban">Příměstské</span> Příměstské linky (Regional)</h3>
-        <p><span class="line-badge suburban">400</span>, <span class="line-badge suburban">401</span>, <span class="line-badge suburban">402</span>, <span class="line-badge suburban">403</span>, <span class="line-badge suburban">404</span>, <span class="line-badge suburban">405</span> – Spojují Kratochvílice s Janovicemi a Hrbáčovem.</p>
-
-        <h3><span class="line-badge train">Vlaky</span> Železniční síť (AI linky / Řiditelné)</h3>
-        <p><span class="line-badge train">S1</span>, <span class="line-badge train">S2</span>, <span class="line-badge train">S3</span> (Esko) a rychlík <span class="line-badge train">R55</span>.</p>
+    <div id="linky" class="page">
+        <div class="card">
+            <h2>Městský linkový systém (Aktualizováno)</h2>
+            <p>Příměstské linky byly odstraněny. Síť se nyní soustředí na čistě městský provoz, aby se mapa v editoru lépe stavěla a optimalizovala.</p>
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Linka</th>
+                            <th>Typ dopravy</th>
+                            <th>Trasa a klíčové průjezdní body</th>
+                            <th>Interval</th>
+                            <th>Technická poznámka pro tvorbu</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="badge badge-train">S1</span></td>
+                            <td>Vlak (AI / Řiditelný)</td>
+                            <td>Bohunice, žel. st. (18) → Výstavní (32) → Vičín, žel. st. (46)</td>
+                            <td>30 min</td>
+                            <td>Kopíruje červený kolejový koridor skrz celou délku mapy.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-train">S2</span></td>
+                            <td>Vlak (AI / Řiditelný)</td>
+                            <td>Vičín, žel. st. (46) → Horský trojúhelník → Směr Hrbáčov</td>
+                            <td>30 min</td>
+                            <td>Zajišťuje obsluhu horní mřížky a odbočky mimo mapu.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-train">R55</span></td>
+                            <td>Rychlík (AI)</td>
+                            <td>Bohunice, žel. st. (18) → Vičín, žel. st. (46) (Projíždí zastávku 32)</td>
+                            <td>60 min</td>
+                            <td>Scenerický dlouhý AI vlak pro zvýšení realističnosti nádraží.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-tram">1</span></td>
+                            <td>Tramvaj</td>
+                            <td>ZŠ Englišova (20) → Zemědělská (22) → OC Král. M. (24) → Výstavní, ž. zast. (32)</td>
+                            <td>10 min</td>
+                            <td>Páteřní tramvajová trať, na zastávce 32 vzniká přestupní uzel s vlakem S1.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-tram">2</span></td>
+                            <td>Tramvaj</td>
+                            <td>Bohunická (19) → Polní (23) → Iris (26) → Antická (61/62) → Výstavní hala</td>
+                            <td>12 min</td>
+                            <td>Využívá historickou dlážděnou sekci Antická na levé straně.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-bus">10</span></td>
+                            <td>Autobus</td>
+                            <td>Kaufland (1) → Koupaliště (3) → Barvy (4) → Benzina (13) → Vičín, náměstí (42)</td>
+                            <td>15 min</td>
+                            <td>Hlavní diametrální autobusová linka spojující sever a jih mapy.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-bus">11</span></td>
+                            <td>Autobus</td>
+                            <td>Chrlice, nák. centrum (9) → rozc. Chrlice (11) → Benzina (13) → Sídl. Bohunice (17)</td>
+                            <td>20 min</td>
+                            <td>Obsluha nákupního centra v dolním pravém rohu.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-bus">12</span></td>
+                            <td>Autobus</td>
+                            <td>Sídl. Bohunice (6) → Bohunice, Troja (8) → Svatoplukova (14) → Bohunice, žel. st. (18)</td>
+                            <td>15 min</td>
+                            <td>Důležitý napáječ z pravého sídliště přímo k hlavnímu nádraží.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="badge badge-trolej">21</span></td>
+                            <td>Trolejbus</td>
+                            <td>Bohunice, žel. st. (18) → Polní (23) → Muzeum (27) → Výstavní, žel. zast. (32)</td>
+                            <td>12 min</td>
+                            <td>Využívá trolejové vedení vedené do kopců kolem zastávky Muzeum.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <h2>Přehledná mapa sítě a zastávek</h2>
-    <p>Níže je schematické znázornění, jak jsou oblasti propojené a které klíčové linky kam vedou.</p>
-
-    <div class="map-container">
-        <div class="map-title">Schéma propojení oblastí</div>
-        
-        <div class="map-line line-1"></div>
-        <div class="map-line line-2"></div>
-        <div class="map-line line-3"></div>
-
-        <div class="station" id="kratochvilice">
-            Kratochvílice (Centrum)
-            <div class="lines">
-                <span class="line-badge tram">1</span>
-                <span class="line-badge tram">2</span>
-                <span class="line-badge bus">10-13</span>
-                <span class="line-badge trolej">21</span>
-            </div>
-        </div>
-
-        <div class="station" id="janovice">
-            Janovice
-            <div class="lines">
-                <span class="line-badge suburban">400-402</span>
-                <span class="line-badge train">S1</span>
-                <span class="line-badge train">R55</span>
-            </div>
-        </div>
-
-        <div class="station" id="hrbacov">
-            Hrbáčov
-            <div class="lines">
-                <span class="line-badge suburban">403-405</span>
-                <span class="line-badge train">S2</span>
-                <span class="line-badge train">S3</span>
+    <div id="zastavky" class="page">
+        <div class="card">
+            <h2>Kompletní index zastávek (1 - 62)</h2>
+            <p>Zde jsou uvedeny všechny zastávky z papírového nákresu včetně jejich přesného charakteru pro nastavení v OMSI Hof souboru.</p>
+            
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID / Číslo</th>
+                            <th>Název zastávky v editoru</th>
+                            <th>Charakter</th>
+                            <th>Doporučený objekt / umístění v mapě</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>Kaufland</td><td>Stálá</td><td>Velká koncová smyčka, parkoviště obchodního domu</td></tr>
+                        <tr><td>2</td><td>Zahradní</td><td>Na znamení</td><td>Standardní uliční označník na spojovací silnici</td></tr>
+                        <tr><td>3</td><td>Koupaliště</td><td>Stálá</td><td>Zálivová zastávka, letní rekreační oblast</td></tr>
+                        <tr><td>4</td><td>Barvy (Vilová)</td><td>Stálá</td><td>Důležitá křižovatka silničních splines v centru</td></tr>
+                        <tr><td>5</td><td>Hrnčířská 102/57</td><td>Na znamení</td><td>Malá odbočka / výřez na znamení ve spodní části</td></tr>
+                        <tr><td>6</td><td>Sídl. Bohunice</td><td>Stálá</td><td>Velké sídlištní obratiště pro kloubové autobusy (vpravo)</td></tr>
+                        <tr><td>7</td><td>U Školy / Les -> Hájenka</td><td>Stálá</td><td>Zastávka se zábradlím u přechodu, přechod do lesního úseku</td></tr>
+                        <tr><td>8</td><td>Bohunice, Troja / Němco</td><td>Stálá</td><td>Ukončení pravé větve, klasická autobusová točna</td></tr>
+                        <tr><td>9</td><td>Chrlice, nákupní centrum</td><td>Stálá</td><td>Dolní pravá koncová smyčka u obchodního komplexu</td></tr>
+                        <tr><td>10</td><td>Chrlice, rozcestí</td><td>Na znamení</td><td>Křižovatkový sloupek před jižním příjezdem</td></tr>
+                        <tr><td>11</td><td>rozc. Chrlice</td><td>Na znamení</td><td>Výjezdový bod u spodního kruhového objezdu</td></tr>
+                        <tr><td>12</td><td>Bohunice, hřbitov</td><td>Stálá</td><td>Uliční záliv s přístřeškem na spojnici směr Benzina</td></tr>
+                        <tr><td>13</td><td>Benzina čerp. stanice</td><td>Stálá</td><td>**Centrální uzel na jihu mapy.** Čtyřsměrné zálivy.</td></tr>
+                        <tr><td>14</td><td>Svatoplukova</td><td>Na znamení</td><td>Rychlostní úsek mezi křižovatkou Benzina a sídlištěm</td></tr>
+                        <tr><td>15</td><td>U Řeky</td><td>Stálá (Vyřízeno)</td><td>Zastávka umístěná přímo na mostním splinu nad řekou</td></tr>
+                        <tr><td>16</td><td>25. Února</td><td>Stálá</td><td>Široká městská třída na jihu s vysokými domy</td></tr>
+                        <tr><td>17</td><td>Sídl. Bohunice (jih)</td><td>Stálá</td><td>Zastávka obsluhující jižní bytové bloky u nádraží</td></tr>
+                        <tr><td>18</td><td>Bohunice, žel. st.</td><td>Stálá</td><td>**Hlavní nádraží jihu (mřížka).** Točna, přestup na vlaky S1/R55.</td></tr>
+                        <tr><td>19</td><td>Bohunická</td><td>Na znamení</td><td>Prudší stoupání od nádražní budovy k tramvajové trati</td></tr>
+                        <tr><td>20</td><td>ZŠ Englišova</td><td>Stálá</td><td>Levý dolní roh, tramvajový nástupní ostrůvek (Kassel)</td></tr>
+                        <tr><td>21</td><td>SŠ Zemědělská</td><td>Stálá</td><td>Městská zastávka na dlouhé levé vertikální třídě</td></tr>
+                        <tr><td>22</td><td>Zemědělská, rozcestí</td><td>Stálá</td><td>Křížení silnice s červenou vlakovou tratí (přejezd se závorami)</td></tr>
+                        <tr><td>23</td><td>Polní</td><td>Stálá</td><td>Ostrůvek podél železničního zářezu v levé části</td></tr>
+                        <tr><td>24</td><td>OC Král. M.</td><td>Stálá</td><td>**Levá mřížka na nákresu.** Velký tramvajový terminál s točnou.</td></tr>
+                        <tr><td>25</td><td>OC</td><td>Stálá</td><td>Pokračování nákupní zóny, moderní skleněné přístřešky</td></tr>
+                        <tr><td>26</td><td>Iris (Soukenická)</td><td>Na znamení</td><td>Uliční sloupek na rozhraní města a kopců</td></tr>
+                        <tr><td>27</td><td>Muzeum</td><td>Na znamení</td><td>Zastávka v kopcovité serpentině na levé straně</td></tr>
+                        <tr><td>28</td><td>Muzeum MHD</td><td>Zrušeno</td><td>Historický dřevěný označník – slouží jako statická kulisa mapy</td></tr>
+                        <tr><td>29</td><td>Výstavní hala</td><td>Stálá</td><td>Vstupní brána a hlavní záliv u severního Výstaviště</td></tr>
+                        <tr><td>30</td><td>Výstavní hala MAM</td><td>Na znamení</td><td>Severozápadní oblouk za Výstavištěm</td></tr>
+                        <tr><td>31</td><td>Výstavní hala TUL</td><td>Na znamení</td><td>Nejvyšší vrchol hřebenu nad Výstavištěm</td></tr>
+                        <tr><td>32</td><td>Výstavní, žel. zast.</td><td>Na znamení</td><td>**Klíčový uzel.** Přestup z tramvají na vlaky S1/R55.</td></tr>
+                        <tr><td>33</td><td>Tescoma</td><td>Na znamení</td><td>Severní propojovací silnice, průmyslový ráz</td></tr>
+                        <tr><td>34</td><td>Výroba SASS</td><td>Na znamení</td><td>Tovární zóna na severním okraji</td></tr>
+                        <tr><td>35</td><td>Pivovar</td><td>Na znamení</td><td>Klesání ze severního hřebenu dolů k údolí</td></tr>
+                        <tr><td>36</td><td>Cukrovar</td><td>Na znamení</td><td>Poslední zastávka před vjezdem do kopců Vičína</td></tr>
+                        <tr><td>39</td><td>SUS</td><td>Stálá</td><td>Zajišťuje technické zázemí správy silnic pod Vičínem</td></tr>
+                        <tr><td>40</td><td>Vičín, nákupní s.</td><td>Stálá</td><td>Nákupní středisko u vjezdu do horského města</td></tr>
+                        <tr><td>42</td><td>Vičín, náměstí</td><td>Stálá</td><td>**Centrum Vičína.** Historické náměstí, koncová stanice autobusů.</td></tr>
+                        <tr><td>45</td><td>Vičín, OD</td><td>Stálá</td><td>Záliv u obchodního domu na pravé straně městského okruhu</td></tr>
+                        <tr><td>46</td><td>Vičín, žel. st.</td><td>Stálá</td><td>**Pravá horní mřížka.** Velké vlakové nádraží a točna pro busy.</td></tr>
+                        <tr><td>47</td><td>Vičín, ulice</td><td>Stálá</td><td>Městská klesající ulice zpět do horského průsmyku</td></tr>
+                        <tr><td>48</td><td>Vičín, aut. st.</td><td>Stálá</td><td>Staré autobusové stanoviště (původní nádraží)</td></tr>
+                        <tr><td>49</td><td>Hlavní</td><td>Na znamení</td><td>Návratová komunikace z hor</td></tr>
+                        <tr><td>50</td><td>Hlavní (serpentiny)</td><td>Na znamení</td><td>**Serpentiny (cik-cak).** Zastávka přímo v ostré horské zatáčce.</td></tr>
+                        <tr><td>51</td><td>ZUŠ</td><td>Stálá</td><td>Městská umělecká škola na úpatí kopce</td></tr>
+                        <tr><td>52</td><td>Čtvrťová, mýto</td><td>Na znamení</td><td>Horský průsmyk se starou mýtní budkou</td></tr>
+                        <tr><td>53</td><td>výroba, chem. perníček</td><td>Na znamení</td><td>Průmyslový bod v hlubokém údolí pod mýtem</td></tr>
+                        <tr><td>60</td><td>Vpravo</td><td>Stálá</td><td>Smyčka/kapsa u křižovatky pod Hrnčířskou ulicí</td></tr>
+                        <tr><td>61</td><td>Antická I</td><td>Stálá</td><td>Historické dlážděné centrum, křížení s kolejemi</td></tr>
+                        <tr><td>62</td><td>Antická II</td><td>Stálá</td><td>Spojovací bod historické zástavby směr Výstaviště</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
     <footer>
-        <p>Interní dokumentace pro vývoj modifikace do OMSI 2. Koncept je fiktivní.</p>
+        <p>Projekt Kratochvílice – Technické podklady pro vývoj OMSI 2 modifikace.</p>
     </footer>
 
 </div>
+
+<script>
+    // Funkce pro přepínání "stránek" (záložek)
+    function openPage(pageId) {
+        // Skryj všechny stránky
+        const pages = document.querySelectorAll('.page');
+        pages.forEach(page => page.classList.remove('active'));
+        
+        // Deaktivuj všechna tlačítka
+        const buttons = document.querySelectorAll('.nav-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        
+        // Zobraz vybranou stránku a aktivuj tlačítko
+        document.getElementById(pageId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    // Centrování mapy po načtení, aby uživatel viděl střed nákresu
+    window.onload = function() {
+        const viewport = document.getElementById('viewport');
+        if (viewport) {
+            viewport.scrollLeft = 400;
+            viewport.scrollTop = 200;
+        }
+    };
+</script>
 
 </body>
 </html>
